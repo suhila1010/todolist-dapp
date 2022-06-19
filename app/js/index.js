@@ -1,7 +1,10 @@
+import $ from 'jQuery'
 import artifact from '/build/contracts/ToDo.json'
 import Web3 from 'web3'
 import TruffleContract from 'truffle-contract'
 /*import config from '/app/js/config'*/
+import {renderTasks} from "./lib/render"
+$(() => {
 console.log('loaded')
 const web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:9545'));
 
@@ -17,11 +20,12 @@ const address = artifact.networks[network].address;
 
 abstraction.at(address)
 .then((todo) => {
-    todo.getTaskIds()
-    .then((taskIds) => {
-      console.log(taskIds)
+    return todo.getTaskFixtures()
+    })
+    .then((task) => {
+        renderTasks($('#tasks'), [task])
     })
 })
 
-web3.eth.getAccounts(console.log);
+//web3.eth.getAccounts(console.log);
 //dummy comment
