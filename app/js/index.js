@@ -1,17 +1,12 @@
-import $ from 'jQuery'
+/*import $ from 'jQuery'
 import artifact from '/build/contracts/ToDo.json'
 import Web3 from 'web3'
 import TruffleContract from 'truffle-contract'
-/*import config from '/app/js/config'*/
+//import config from '/app/js/config'
 import {renderTasks} from "./lib/render"
 $(() => {
 console.log('loaded')
 const web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:9545'));
-
-// const TruffleContract = require("truffle-contract")
-
-
-
 const abstraction = new TruffleContract(artifact);
 
 abstraction.setProvider(web3.currentProvider);
@@ -28,4 +23,22 @@ abstraction.at(address)
 })
 
 //web3.eth.getAccounts(console.log);
-//dummy comment
+//dummy comment*/
+
+import $ from 'jquery';  
+import App from './lib/app';
+
+$(() => { 
+  const app = new App(); 
+  app.setup()
+  .then(() => { 
+    return app.init(); 
+  }) 
+  .then(() => { 
+    console.log('ETB ToDo List Dapp loaded!!'); 
+  }) 
+  .catch((error) => {
+    console.error(`Ooops... something went wrong: ${error}`);
+  });
+});
+
