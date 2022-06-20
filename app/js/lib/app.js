@@ -44,26 +44,35 @@ setup() {
     });
 }
 
-init() {
+getAndRenderTasks() {
+    getTasks(this.todo)
+      .then((tasks) => renderTasks(this.$tasks, tasks));
+  }
+
+  init() {
     this.$newTask.on('submit', (event) => {
-        event.preventDefault();
-        this.todo.createTask(
-            this.$taskContent.val(), 
-            this.$taskAuthor.val(), 
-            {from: this.account, gas: 1000000}
-        ).then(() => {
-            console.log('Task created!');
-        })
-        .catch((error) => {
-            console.log(`Oops... There was an error: ${error}`);
-        });
+      event.preventDefault();
+
+      this.todo.createTask(
+        this.$taskContent.val(),
+        this.$taskAuthor.val(),
+        { from: this.account, gas: 1000000 }
+      ).then(() => {
+        this.$taskContent.val('')
+        this.$taskAuthor.val('')
+        this.getAndRenderTasks()
+      })
     });
-    return new Promise((resolve, reject) => { 
-        getTasks(this.todo)
-        .then((tasks) => { 
-        renderTasks(this.$tasks, tasks);  
-        }); 
-    });
+
+    this.$tasks.on('click', (event) => {
+      if($(event.target).is('input')) {
+        const id = event.target.id.split('-')
+        this.todo.toggleDone(id, { from: this.account, gas: 1000000 })
+          .then(() => this.getAndRenderTasks());
+      }
+    })
+
+    this.getAndRenderTasks();
 } 
 }
 
